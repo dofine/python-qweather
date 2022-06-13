@@ -1,3 +1,15 @@
+[project]
+name = "python-qweather"
+version = "0.1.1"
+description = "Python API wrapper for https://qweather.com"
+long_description = file: README.md
+long_description_content_type = text/markdown
+dependencies = ["aiohttp"]
+keywords = ["weather"]
+readme = "README.md"
+authors = ["dofine <dofine@users.noreply.github.com>"]
+license = { file = "LICENSE "}
+
 [tool.poetry]
 name = "python-qweather"
 version = "0.1.1"
@@ -13,7 +25,6 @@ pytest = "^5.2"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-
 
 
 [tool.bumpver]
