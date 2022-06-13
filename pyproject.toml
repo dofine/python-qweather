@@ -1,6 +1,6 @@
 [project]
 name = "python-qweather"
-version = "0.1.1"
+version = "0.1.2"
 description = "Python API wrapper for https://qweather.com"
 long_description = { file = "README.md" }
 long_description_content_type = "text/markdown"
@@ -17,7 +17,7 @@ classifiers = [
 
 [tool.poetry]
 name = "python-qweather"
-version = "0.1.1"
+version = "0.1.2"
 description = "Python API wrapper for https://qweather.com"
 authors = ["dofine <dofine@users.noreply.github.com>"]
 
@@ -33,7 +33,7 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.bumpver]
-current_version = "0.1.1"
+current_version = "0.1.2"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
