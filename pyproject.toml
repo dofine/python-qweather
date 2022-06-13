@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "python-qweather"
 version = "0.1.0"
-description = ""
+description = "Python API wrapper for https://qweather.com"
 authors = ["dofine <dofine@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
@@ -13,3 +13,24 @@ pytest = "^5.2"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+
+[tool.bumpver]
+current_version = "0.1.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = true
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'version = "{version}"',
+]
+"python_qweather/__init__.py" = [
+    '__version__ = "{version}"'
+]
+"test/test_python_qweather.py" = [
+    '__version__ = "{version}"'
+]
