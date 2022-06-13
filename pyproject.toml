@@ -12,6 +12,7 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
 ]
+repository = "https://github.com/dofine/python-qweather"
 
 
 [tool.poetry.dependencies]
