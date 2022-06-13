@@ -31,6 +31,4 @@ push = true
 "python_qweather/__init__.py" = [
     '__version__ = "{version}"'
 ]
-"test/test_python_qweather.py" = [
-    '__version__ = "{version}"'
-]
+
