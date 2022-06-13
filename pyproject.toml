@@ -1,25 +1,18 @@
-[project]
-name = "python-qweather"
-version = "0.1.2"
-description = "Python API wrapper for https://qweather.com"
-long_description = { file = "README.md" }
-long_description_content_type = "text/markdown"
-dependencies = ["aiohttp"]
-keywords = ["weather"]
-readme = "README.md"
-authors = ["dofine <dofine@users.noreply.github.com>"]
-license = { file = "LICENSE" }
-classifiers = [
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-]
 
 [tool.poetry]
 name = "python-qweather"
 version = "0.1.2"
 description = "Python API wrapper for https://qweather.com"
 authors = ["dofine <dofine@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+keywords = ["weather"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.7"
