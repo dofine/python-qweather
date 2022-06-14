@@ -2,6 +2,7 @@
 
 
 ## Features
+- [城市信息查询](https://dev.qweather.com/docs/api/geo/city-lookup/)
 - [实时天气](https://dev.qweather.com/docs/api/weather/weather-now/)
 - [逐天天气预报](https://dev.qweather.com/docs/api/weather/weather-daily-forecast/)
 - [实时空气质量](https://dev.qweather.com/docs/api/air/air-now/)
@@ -24,7 +25,7 @@ async def test_now_weather():
 asyncio.run(test_now_weather())
 ```
 
-
 ## TODO
 
-## Credits
+## Credits and Thanks
+- https://github.com/bieniu/accuweather

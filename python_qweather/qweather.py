@@ -18,6 +18,7 @@ from .const import (
     ATTR_GEOPOSITION,
     ATTR_SUNSET,
     ENDPOINT,
+    GEO_ENDPOINT,
     HTTP_HEADERS,
     HTTP_OK,
     HTTP_UNAUTHORIZED,
@@ -42,6 +43,7 @@ class QWeather:
         longitude: float | None = None,
         location_key: str | None = None,
         is_dev: bool = True,
+        unit: str = "m",
     ):
         """Initialize."""
         if not self._valid_api_key(api_key):
@@ -58,10 +60,8 @@ class QWeather:
         self._api_key = api_key
         self._session = session
         self._location_key = location_key
-        self._location_name: str | None = None
-        self._requests_remaining: int | None = None
         self._is_dev = is_dev
-        self._unit = "m"
+        self._unit = unit
 
     @staticmethod
     def _valid_coordinates(
@@ -79,13 +79,15 @@ class QWeather:
 
     @staticmethod
     def _valid_api_key(api_key: str) -> bool:
-        """Return True if API key is valid."""
+        """TODO: Return True if API key is valid."""
         return True
 
     def _construct_url(self, arg: str, **kwargs: str) -> str:
         """Construct API URL."""
-
-        url = (DEV_ENDPOINT if self._is_dev else ENDPOINT) + URLS[arg].format(**kwargs)
+        if arg == ATTR_GEOPOSITION:
+            url = GEO_ENDPOINT + URLS[arg].format(**kwargs)
+        else:
+         url = (DEV_ENDPOINT if self._is_dev else ENDPOINT) + URLS[arg].format(**kwargs)
 
         return url
 
@@ -136,21 +138,26 @@ class QWeather:
         return cast(Dict[str, Any], data if isinstance(data, dict) else data[0])
 
     async def async_get_location(self) -> None:
-        """TODO Retreive location data from QWeather."""
+        """TODO Retreive location data from QWeather.
+        If `location_key` is not provided, try to lookup it by lat/lon
+        """
         url = self._construct_url(
             ATTR_GEOPOSITION,
-            api_key=self._api_key,
-            lat=str(self.latitude),
-            lon=str(self.longitude),
+            key=self._api_key,
+            latitude=str(self.latitude),
+            longitude=str(self.longitude),
         )
         data = await self._async_get_data(url)
-        self._location_key = data["Key"]
-        self._location_name = data["LocalizedName"]
+        # return the first item from list.
+        self._location_key = data["location"][0]["id"]
+        return self._location_key
+
 
     async def async_get_daily_forecast(self) -> list[dict[str, Any]]:
         """Retreive forecast data from QWeather."""
         if not self._location_key:
             await self.async_get_location()
+            
         assert self._location_key is not None
         url = self._construct_url(
             ATTR_DAILY_FORCAST_7D if self._is_dev else ATTR_DAILY_FORCAST_3D,
@@ -177,11 +184,13 @@ class QWeather:
         )
         data = await self._async_get_data(url)
         return data
-    
+
     async def async_get_airnow(self) -> Dict[str, Any]:
-        url = self._construct_url(ATTR_AIRNOW, key=self._api_key, location_key=self._location_key)
+        url = self._construct_url(
+            ATTR_AIRNOW, key=self._api_key, location_key=self._location_key
+        )
         data = await self._async_get_data(url)
-        return data['now']
+        return data["now"]
 
     @property
     def location_name(self) -> str | None:
@@ -193,10 +202,6 @@ class QWeather:
         """Return location key."""
         return self._location_key
 
-    @property
-    def requests_remaining(self) -> int | None:
-        """Return number of remaining allowed requests."""
-        return self._requests_remaining
 
 
 class ApiError(Exception):

@@ -17,3 +17,10 @@ async def test_now_weather():
         assert now_weather['code'] == '200'
         # assert now_weather['now']['temp'] == '25'
         
+
+@pytest.mark.asyncio
+async def test_geoapi():
+    async with aiohttp.ClientSession() as client_session:
+        q = QWeather(api_key=os.environ['QWEATHER_APIKEY'], session=client_session, latitude=39.96583, longitude=116.328955)
+        location_key = await q.async_get_location()
+        assert location_key == '101010200'

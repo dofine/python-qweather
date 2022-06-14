@@ -33,7 +33,7 @@ TEMPERATURES: tuple[str, ...] = (
     "RealFeelTemperatureShade",
 )
 URLS: dict[str, str] = {
-    ATTR_GEOPOSITION: "?location={q}&key={sign}",
+    ATTR_GEOPOSITION: "?location={longitude},{latitude}&key={key}",
     ATTR_CURRENT_CONDITIONS: "weather/now?location={location_key}&key={key}&unit={unit}",
     ATTR_DAILY_FORCAST_3D: "weather/3d?location={location_key}&key={key}&unit={unit}",  # pylint: disable=line-too-long
     ATTR_DAILY_FORCAST_7D: "weather/7d?location={location_key}&key={key}&unit={unit}",
