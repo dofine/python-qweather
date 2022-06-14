@@ -38,4 +38,4 @@ class WeatherDayForecastInfo:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "WeatherDayForecastInfo":
-        return cls(fx_link=data["fxLink"], fx_date=data["daily"]["fxDate"])
+        return cls(fx_link=data["fxLink"], fx_date=data["daily"]["fxDate"], sun_rise=data["daily"]["sunrise"])
