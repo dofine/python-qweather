@@ -1,5 +1,6 @@
 """Constants for QWeather library."""
 from __future__ import annotations
+from typing import Final
 
 ATTR_CURRENT_CONDITIONS: str = "weather_now"
 ATTR_GEOPOSITION: str = "geoapi"
@@ -8,14 +9,22 @@ ATTR_DAILY_FORCAST_7D: str = "forecasts_7d"
 ATTR_SUNSET: str = 'sunset'
 ATTR_AIRNOW: str = 'air_now'
 
-ENDPOINT: str = "https://api.qweather.com/v7/"
-DEV_ENDPOINT: str = "https://devapi.qweather.com/v7/"
-GEO_ENDPOINT: str = "https://geoapi.qweather.com/v2/city/lookup"
-HTTP_OK: int = 200
-HTTP_UNAUTHORIZED: int = 401
-HTTP_PAYMENT: int =402
+ENDPOINT: Final = "https://api.qweather.com/v7/"
+DEV_ENDPOINT: Final = "https://devapi.qweather.com/v7/"
+GEO_ENDPOINT: Final = "https://geoapi.qweather.com/v2/city/lookup"
+
+# status code https://dev.qweather.com/docs/resource/status-code/
+HTTP_OK: Final = 200
+HTTP_NO_DATA: Final = 204
+HTTP_ERROR: Final = 400
+HTTP_UNAUTHORIZED: Final = 401
+HTTP_QUOTA: Final = 402
+HTTP_NO_ACCESS: Final = 403
+HTTP_NO_LOCATION: Final = 404
+HTTP_QPM: Final = 429
+HTTP_TIMEOUT: Final = 500
 HTTP_HEADERS: dict[str, str] = {"Content-Encoding": "gzip"}
-REQUESTS_EXCEEDED: str = "The allowed number of requests has been exceeded."
+REQUESTS_EXCEEDED: Final = "The allowed number of requests has been exceeded."
 
 REMOVE_FROM_CURRENT_CONDITION: tuple[str, ...] = (
     "LocalObservationDateTime",
