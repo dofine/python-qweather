@@ -138,7 +138,7 @@ class QWeather:
         return cast(Dict[str, Any], data if isinstance(data, dict) else data[0])
 
     async def async_get_location(self) -> None:
-        """TODO Retreive location data from QWeather.
+        """Retreive location data from QWeather.
         If `location_key` is not provided, try to lookup it by lat/lon
         """
         url = self._construct_url(
