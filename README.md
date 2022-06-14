@@ -12,8 +12,16 @@
 ### 实时天气
 ```python
 import aiohttp
+import asyncio
+from python_qweather import QWeather
 
-with aiohttp
+async def test_now_weather():
+    async with aiohttp.ClientSession() as client_session:
+        q = QWeather(api_key=os.environ['QWEATHER_APIKEY'], session=client_session, location_key='101010100')
+        now_weather = await q.async_get_now_weather()
+        print(now_weather)
+
+asyncio.run(test_now_weather())
 ```
 
 
