@@ -1,12 +1,32 @@
 """
 """
-from dataclasses import dataclass
+
 from typing import Any, Optional
+from attrs import define, field
 
 
-@dataclass
-class WeatherDayForecastInfo:
-    fx_link: str
+@define
+class WeatherInfo:
+    # obs_time: str
+    # temp: int
+    # feels_like: int
+    # icon: str
+    # weather_text: str
+    # wind_360: int
+    # wind_dir: str
+    # wind_scale: str
+    humidity: int
+    precip: int
+    pressure: int
+    vis: int
+    cloud: int
+    dew: int
+    sources: str
+
+
+@define
+class WeatherDayForecastInfo(WeatherInfo):
+    obs_time: str
     fx_date: str
     sun_rise: str
     sun_set: str
@@ -14,7 +34,7 @@ class WeatherDayForecastInfo:
     moon_set: str
     moon_phase: str
     moon_phase_icon: str
-    temp_max: int
+    temp_max: int = field(order=True)
     temp_min: int
     icon_day: str
     text_day: str
@@ -28,14 +48,10 @@ class WeatherDayForecastInfo:
     wind_dir_night: str
     wind_scale_night: str
     wind_speed_night: int
-    precip: float  # 总降水量，毫米
-    uv_index: int  # 紫外线指数
-    humidity: int  # 相对湿度，百分比数值
-    press: int  # 大气压，百帕
-    vis: int  # 能见度，公里
-    cloud: int  # 云量，百分比数值
-    sources: str  # 数据来源
+
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "WeatherDayForecastInfo":
         return cls(fx_link=data["fxLink"], fx_date=data["daily"]["fxDate"])
+    
+    
