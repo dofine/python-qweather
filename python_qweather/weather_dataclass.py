@@ -1,7 +1,7 @@
 """
 """
 
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 from attrs import define, field
 
 
@@ -51,7 +51,5 @@ class WeatherDayForecastInfo(WeatherInfo):
 
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "WeatherDayForecastInfo":
-        return cls(fx_link=data["fxLink"], fx_date=data["daily"]["fxDate"])
-    
-    
+    def from_dict(cls, data: Dict[str, Any]) -> "WeatherDayForecastInfo":
+        return cls(fx_link=data["fxLink"], fx_date=data["daily"]["fxDate"], sun_rise=data["daily"]["sunrise"])
