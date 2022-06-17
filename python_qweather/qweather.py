@@ -3,7 +3,7 @@ Python wrapper for getting weather data from https://qweather.com
 """
 from __future__ import annotations
 
-import json
+
 import logging
 from typing import Any, Dict, cast
 import hashlib
@@ -24,7 +24,6 @@ from .const import (
     HTTP_UNAUTHORIZED,
     REMOVE_FROM_CURRENT_CONDITION,
     REMOVE_FROM_FORECAST,
-    TEMPERATURES,
     URLS,
     DEV_ENDPOINT,
 )
@@ -43,17 +42,17 @@ class QWeather:
         longitude: float | None = None,
         location_key: str | None = None,
         is_dev: bool = True,
-        unit: str = "m",
+        unit: str = 'm',
     ):
         """Initialize."""
         if not self._valid_api_key(api_key):
             raise InvalidApiKeyError(
-                "Your API Key must be a 32-character hexadecimal string"
+                'Your API Key must be a 32-character hexadecimal string'
             )
 
         if not location_key:
             if not self._valid_coordinates(latitude, longitude):
-                raise InvalidCoordinatesError("Your coordinates are invalid")
+                raise InvalidCoordinatesError('Your coordinates are invalid')
 
         self.latitude = latitude
         self.longitude = longitude
@@ -86,8 +85,9 @@ class QWeather:
         """Construct API URL."""
         if arg == ATTR_GEOPOSITION:
             url = GEO_ENDPOINT + URLS[arg].format(**kwargs)
-        else:
-         url = (DEV_ENDPOINT if self._is_dev else ENDPOINT) + URLS[arg].format(**kwargs)
+            return url
+        _endpoint = DEV_ENDPOINT if self._is_dev else ENDPOINT
+        url = _endpoint + URLS[arg].format(**kwargs)
 
         return url
 
@@ -103,7 +103,7 @@ class QWeather:
         """Parse and clean forecast API response."""
         parsed_data = [
             {key: value for key, value in item.items() if key not in to_remove}
-            for item in data["daily"]
+            for item in data['daily']
         ]
 
         return parsed_data
@@ -112,15 +112,15 @@ class QWeather:
     def _get_signature(params: Dict, api_key: str) -> Dict:
         sorted_params = sorted(
             [
-                "{}={}".format(k, v)
+                '{}={}'.format(k, v)
                 for k, v in params.items()
-                if v != "" and k != "sign"
+                if v != '' and k != 'sign'
             ],
             key=lambda x: x[0],
         )
-        s = "&".join(sorted_params)
+        s = '&'.join(sorted_params)
         s += api_key
-        md5_s = hashlib.md5(s.encode("utf-8")).hexdigest()
+        md5_s = hashlib.md5(s.encode('utf-8')).hexdigest()
         return md5_s
 
     async def _async_get_data(self, url: str) -> dict[str, Any]:
@@ -128,14 +128,20 @@ class QWeather:
 
         async with self._session.get(url, headers=HTTP_HEADERS) as resp:
             data = await resp.json()
-            if int(data["code"]) == HTTP_UNAUTHORIZED:
-                raise InvalidApiKeyError("Invalid API key")
+            if int(data['code']) == HTTP_UNAUTHORIZED:
+                raise InvalidApiKeyError('Invalid API key')
             if resp.status != HTTP_OK:
-                raise ApiError(f"Invalid response from QWeather API: {data['code']}")
-            _LOGGER.debug("Data retrieved from %s, status: %s", url, data["code"])
+                raise ApiError(
+                    f"Invalid response from QWeather API: {data['code']}"
+                )
+            _LOGGER.debug(
+                'Data retrieved from %s, status: %s', url, data['code']
+            )
 
         # pylint: disable=deprecated-typing-alias
-        return cast(Dict[str, Any], data if isinstance(data, dict) else data[0])
+        return cast(
+            Dict[str, Any], data if isinstance(data, dict) else data[0]
+        )
 
     async def async_get_location(self) -> None:
         """Retreive location data from QWeather.
@@ -149,15 +155,14 @@ class QWeather:
         )
         data = await self._async_get_data(url)
         # return the first item from list.
-        self._location_key = data["location"][0]["id"]
+        self._location_key = data['location'][0]['id']
         return self._location_key
-
 
     async def async_get_daily_forecast(self) -> list[dict[str, Any]]:
         """Retreive forecast data from QWeather."""
         if not self._location_key:
             await self.async_get_location()
-            
+
         assert self._location_key is not None
         url = self._construct_url(
             ATTR_DAILY_FORCAST_7D if self._is_dev else ATTR_DAILY_FORCAST_3D,
@@ -176,7 +181,9 @@ class QWeather:
             unit=self._unit,
         )
         data = await self._async_get_data(url)
-        return self._clean_current_condition(data, REMOVE_FROM_CURRENT_CONDITION)
+        return self._clean_current_condition(
+            data, REMOVE_FROM_CURRENT_CONDITION
+        )
 
     async def async_get_sunrise(self) -> Dict[str, Any]:
         url = self._construct_url(
@@ -190,7 +197,7 @@ class QWeather:
             ATTR_AIRNOW, key=self._api_key, location_key=self._location_key
         )
         data = await self._async_get_data(url)
-        return data["now"]
+        return data['now']
 
     @property
     def location_name(self) -> str | None:
@@ -201,7 +208,6 @@ class QWeather:
     def location_key(self) -> str | None:
         """Return location key."""
         return self._location_key
-
 
 
 class ApiError(Exception):
