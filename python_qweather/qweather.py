@@ -101,7 +101,7 @@ class QWeather:
         return {key: data[key] for key in data if key not in to_remove}
 
     @staticmethod
-    def _parse_forecast(data: dict, to_remove: tuple) -> list:
+    def _parse_daily_forecast(data: dict, to_remove: tuple) -> list:
         """Parse and clean forecast API response."""
         parsed_data = [
             {key: value for key, value in item.items() if key not in to_remove}
@@ -173,7 +173,7 @@ class QWeather:
             unit=self._unit,
         )
         data = await self._async_get_data(url)
-        return self._parse_forecast(data, REMOVE_FROM_FORECAST)
+        return self._parse_daily_forecast(data, REMOVE_FROM_FORECAST)
 
     async def async_get_now_weather(self) -> Dict[str, Any]:
         url = self._construct_url(
