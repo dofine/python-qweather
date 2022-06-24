@@ -8,13 +8,15 @@ import logging
 from typing import Any, Dict, cast
 import hashlib
 from aiohttp import ClientSession
+from .exceptions import *
 
 
 from .const import (
     ATTR_AIRNOW,
     ATTR_CURRENT_CONDITIONS,
-    ATTR_DAILY_FORCAST_3D,
-    ATTR_DAILY_FORCAST_7D,
+    ATTR_DAILY_FORECAST_3D,
+    ATTR_DAILY_FORECAST_7D,
+    ATTR_HOURLY_FORECAST,
     ATTR_GEOPOSITION,
     ATTR_SUNSET,
     ENDPOINT,
@@ -165,7 +167,7 @@ class QWeather:
 
         assert self._location_key is not None
         url = self._construct_url(
-            ATTR_DAILY_FORCAST_7D if self._is_dev else ATTR_DAILY_FORCAST_3D,
+            ATTR_DAILY_FORECAST_7D if self._is_dev else ATTR_DAILY_FORECAST_3D,
             key=self._api_key,
             location_key=self._location_key,
             unit=self._unit,
@@ -184,6 +186,21 @@ class QWeather:
         return self._clean_current_condition(
             data, REMOVE_FROM_CURRENT_CONDITION
         )
+
+    async def async_get_hourly_forecast(self) -> list[dict[str, Any]]:
+        """小时级别天气预报
+
+        Returns:
+            list[dict[str, Any]]: _description_
+        """
+        url = self._construct_url(
+            ATTR_HOURLY_FORECAST,
+            key=self._api_key,
+            location_key=self._location_key,
+            unit=self._unit,
+        )
+        data = await self._async_get_data(url)
+        return data
 
     async def async_get_sunrise(self) -> Dict[str, Any]:
         url = self._construct_url(
@@ -208,39 +225,3 @@ class QWeather:
     def location_key(self) -> str | None:
         """Return location key."""
         return self._location_key
-
-
-class ApiError(Exception):
-    """Raised when QWeather API request ended in error."""
-
-    def __init__(self, status: str):
-        """Initialize."""
-        super().__init__(status)
-        self.status = status
-
-
-class InvalidApiKeyError(Exception):
-    """Raised when API Key format is invalid."""
-
-    def __init__(self, status: str):
-        """Initialize."""
-        super().__init__(status)
-        self.status = status
-
-
-class InvalidCoordinatesError(Exception):
-    """Raised when coordinates are invalid."""
-
-    def __init__(self, status: str):
-        """Initialize."""
-        super().__init__(status)
-        self.status = status
-
-
-class RequestsExceededError(Exception):
-    """Raised when allowed number of requests has been exceeded."""
-
-    def __init__(self, status: str):
-        """Initialize."""
-        super().__init__(status)
-        self.status = status
