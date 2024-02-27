@@ -16,7 +16,7 @@ repository = "https://github.com/dofine/python-qweather"
 
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 aiohttp = "^3.9.3"
 
 [tool.poetry.dev-dependencies]
@@ -29,19 +29,13 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 
-[tool.bumpver]
-current_version = "0.1.5"
-version_pattern = "MAJOR.MINOR.PATCH"
-commit_message = "bump version {old_version} -> {new_version}"
-commit = true
-tag = true
-push = true
 
-[tool.bumpver.file_patterns]
-"pyproject.toml" = [
-    'version = "{version}"',
-]
-"python_qweather/__init__.py" = [
-    '__version__ = "{version}"'
-]
+[[tool.bumpversion.files]]
+filename = "python_qweather/__init__.py"
+search = "__version__ = {current_version}"
+replace = "__version__ = {current_version}"
 
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = "version = {current_version}"
+replace = "version = {current_version}"
